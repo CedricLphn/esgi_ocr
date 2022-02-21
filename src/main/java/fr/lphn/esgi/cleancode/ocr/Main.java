@@ -19,7 +19,7 @@ public class Main {
 
         Ascii number = new Ascii();
 
-        writer.get();
+        writer.read();
 
         //console.log(String.valueOf(number.is(test, 1)));
 

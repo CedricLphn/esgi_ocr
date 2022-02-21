@@ -3,7 +3,7 @@ package fr.lphn.esgi.cleancode.ocr.parser;
 import java.util.Arrays;
 import java.util.List;
 
-public final class Ascii implements Template {
+public final class Ascii implements Template<char[][]> {
 
     private final List<char[][]> numbers = List.of(
             new char[][]{{' ', '_', ' '}, {'|', ' ', '|'}, {'|', '_', '|'}}, // 0

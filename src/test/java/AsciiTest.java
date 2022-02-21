@@ -8,11 +8,12 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AsciiTest {
 
     private static final List<char[][]> numbers = List.of(
-            new char[][]{{' ', '_', ' '}, {'|', ' ', '|'}, {'|', '_', '|'}},
+            new char[][]{{' ', '_', ' '}, {'|', ' ', '|'}, {'|', '_', '|'}}, // 0
             new char[][]{{' ', ' ', ' '}, {' ', ' ', '|'}, {' ', ' ', '|'}},
             new char[][]{{' ', '_', ' '}, {' ', '_', '|'}, {'|', '_', ' '}},
             new char[][]{{' ', '_', ' '}, {' ', '_', '|'}, {' ', '_', '|'}},
@@ -21,7 +22,8 @@ public class AsciiTest {
             new char[][]{{' ', '_', ' '}, {'|', '_', ' '}, {'|', '_', '|'}},
             new char[][]{{' ', '_', ' '}, {' ', ' ', '|'}, {' ', ' ', '|'}},
             new char[][]{{' ', '_', ' '}, {'|', '_', '|'}, {'|', '_', '|'}},
-            new char[][]{{' ', '_', ' '}, {'|', '_', '|'}, {' ', '_', '|'}}
+            new char[][]{{' ', '_', ' '}, {'|', '_', '|'}, {' ', '_', '|'}}, // 9
+            new char[][]{{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}}  // Unknown number
     );
 
     private static Template template;
@@ -81,6 +83,13 @@ public class AsciiTest {
     @Test
     public void GivenNone_ThenNone_ReturnNine() throws IllegalNumberException {
         assertEquals(9, parser.parse(numbers.get(9)), 0);
+    }
+
+    @Test
+    public void GivenNone_ThenNone_ReturnThrowException() {
+        assertThrows(IllegalNumberException.class, () -> {
+            parser.parse(numbers.get(10));
+        });
     }
 
 }
