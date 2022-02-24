@@ -12,7 +12,7 @@ public class FileWriter implements Writer {
 
     @Override
     public void write(String message) throws IOException {
-        //file.createNewFile();
+        file.createNewFile();
         PrintWriter fileWriter = new PrintWriter(new java.io.FileWriter(file, true));
 
         fileWriter.write(message + "\n");

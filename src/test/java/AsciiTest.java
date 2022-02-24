@@ -1,6 +1,6 @@
 import fr.lphn.esgi.cleancode.ocr.exceptions.IllegalNumberException;
 import fr.lphn.esgi.cleancode.ocr.parser.Ascii;
-import fr.lphn.esgi.cleancode.ocr.parser.Parser;
+import fr.lphn.esgi.cleancode.ocr.parser.SimpleParser;
 import fr.lphn.esgi.cleancode.ocr.parser.Template;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,12 +27,12 @@ public class AsciiTest {
     );
 
     private static Template template;
-    private static Parser parser;
+    private static SimpleParser parser;
 
     @BeforeAll
     public static void init() {
         template = new Ascii();
-        parser = new Parser(template);
+        parser = new SimpleParser(template);
     }
 
     @Test

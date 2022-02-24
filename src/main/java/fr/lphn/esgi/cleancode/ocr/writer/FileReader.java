@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class FileReader implements Reader<List<String>> {
     private final File file;
     private List<String> output;
+    private int size = 1;
 
     public FileReader(String filename) {
         this.file = new File(filename);
@@ -39,5 +40,10 @@ public class FileReader implements Reader<List<String>> {
     @Override
     public List<String> get() {
         return output;
+    }
+
+    @Override
+    public int size() {
+        return size;
     }
 }
