@@ -1,19 +1,26 @@
 package fr.lphn.esgi.cleancode.ocr;
 
+import fr.lphn.esgi.cleancode.ocr.application.OCREngine;
+import fr.lphn.esgi.cleancode.ocr.application.OCREngineBuilder;
+import fr.lphn.esgi.cleancode.ocr.logger.ConsoleLogger;
+import fr.lphn.esgi.cleancode.ocr.logger.Log;
+import fr.lphn.esgi.cleancode.ocr.parser.Ascii;
+import fr.lphn.esgi.cleancode.ocr.parser.SimpleParser;
 import fr.lphn.esgi.cleancode.ocr.utils.LogoAscii;
+import fr.lphn.esgi.cleancode.ocr.writer.FileReader;
+import fr.lphn.esgi.cleancode.ocr.writer.FileType;
+import fr.lphn.esgi.cleancode.ocr.writer.FileWriter;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
-    private static List<String> input = new ArrayList<>();
-    private static List<String> output = new ArrayList<>();
+    private static List<FileReader> input = new ArrayList<>();
+    private static Map<FileType, FileWriter> output = new HashMap<>();
+    private static Log logger = new ConsoleLogger();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println(LogoAscii.show());
@@ -39,82 +46,36 @@ public class Main {
 
             System.out.println("Let's recap");
             System.out.println("Input : " + StringUtils.join(input.listIterator(), ","));
-            System.out.println("Output : " + StringUtils.join(output.listIterator(), ","));
-            System.out.print("It's ok sir ? (y/n)\n");
+            System.out.println("Output : " + StringUtils.join(new String[]{output.toString()}, ","));
+            System.out.print("Is ok sir ? (y/n)\n");
 
             if(scanner.nextLine().equalsIgnoreCase("y")) {
+                startEngine();
                 break;
             }
         }
 
-        //Scanner scanner = new Scanner();
+    }
 
-        /*
-        FileReader writer = new FileReader("C:\\Users\\cedri\\IdeaProjects\\fr.lphn.esgi.cleancode.ocr\\src\\main\\resources\\test.txt");
+    private static void startEngine() {
+        SimpleParser simpleParser = new SimpleParser(new Ascii());
+        OCREngine engine = OCREngineBuilder.create()
+                .logger(logger)
+                .readers(input)
+                .writer(output)
+                .parser(simpleParser)
+                .build();
 
-        char[][] test = new char[][]{{' ', '_', ' '}, {'|', ' ', '|'}, {'|', '_', '|'}};
-
-        Log console = ConsoleLoggerFactory.of();
-
-        console.log("Hello");
-
-        Ascii number = new Ascii();
-
-        writer.read();
-
-        List<String> strings = writer.get();
-        Ascii ascii = new Ascii();
-        Parser parser = new Parser(ascii);
-
-        List<String> accounts = new ArrayList<>();
-
-        for (int i = 0; i < strings.size(); i += 4) {
-            String currentLine = strings.get(i);
-            StringBuilder account = new StringBuilder();
-            for (int column = 0; column < currentLine.length(); column += 3) {
-                char[][] converter = new ListStringToChar(strings).convert(i, column);
-                try {
-                    int parse = parser.parse(converter);
-                    account.append(parse);
-                } catch (IllegalNumberException e) {
-                    account.append('?');
-                    System.out.println(e.getMessage());
-                }
-            }
-            System.out.println(account);
-            accounts.add(account.toString());
-        }
-
-        FileWriter tst = new FileWriter(new File("hey.txt"));
-        for (String account : accounts) {
-            int nbr = 0;
-
-            boolean isValidAccount = true;
-            for (int i = 0; i < account.length(); i++) {
-                if (account.charAt(i) != '?' && isValidAccount) {
-                    nbr = nbr + parseInt(account.substring(i, i + 1)) * (account.length() - i);
-                } else {
-                    isValidAccount = false;
-                }
-            }
-
-            String result;
-            if (isValidAccount && nbr % 11 == 0) result = "";
-            else if (!isValidAccount) result = "ILL";
-            else result = "ERR";
-            //System.out.println((isValidAccount && nbr % 11 == 0) ? true : "ERR");
-            tst.write(account + " " + result);
-
-        }
-
-        //console.log(String.valueOf(number.is(test, 1)));
-         */
+        engine.readFile();
+        engine.parse();
+        engine.write();
     }
 
     private static void chooseSingleOutputFile() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Output\n> ");
-        output.add(scanner.nextLine());
+        FileWriter fw = new FileWriter(scanner.nextLine());
+        output.put(FileType.ALL, fw);
     }
 
     private static void chooseInputFile() {
@@ -123,7 +84,7 @@ public class Main {
             System.out.print("Enter the input file text (q for quit):\n> ");
             String file = scanner.nextLine();
             if(!file.equalsIgnoreCase("q")) {
-                input.add(file);
+                input.add(new FileReader(file));
             }else {
                 break;
             }
@@ -133,10 +94,10 @@ public class Main {
     private static void chooseOutputMultipleFile() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Output for authorized\n> ");
-        output.add(scanner.nextLine());
-        System.out.print("Output for wrong result\n> ");
-        output.add(scanner.nextLine());
+        output.put(FileType.AUTHORIZED, new FileWriter(scanner.nextLine()));
+        System.out.print("Output for illegal result\n> ");
+        output.put(FileType.ILLEGAL, new FileWriter(scanner.nextLine()));
         System.out.print("Output for unknown result\n> ");
-        output.add(scanner.nextLine());
+        output.put(FileType.UNKNOWN, new FileWriter(scanner.nextLine()));
     }
 }

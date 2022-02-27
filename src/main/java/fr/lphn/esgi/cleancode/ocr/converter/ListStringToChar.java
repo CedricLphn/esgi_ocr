@@ -1,12 +1,21 @@
 package fr.lphn.esgi.cleancode.ocr.converter;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ListStringToChar implements Converter<List<String>, char[][]> {
+public class ListStringToChar implements Converter<char[][]> {
 
-    private final List<String> input;
+    private List<String> input;
 
     public ListStringToChar(List<String> input) {
+        this.input = input;
+    }
+
+    public ListStringToChar() {
+        this.input = new ArrayList<>();
+    }
+
+    public void setInput(List<String> input) {
         this.input = input;
     }
 

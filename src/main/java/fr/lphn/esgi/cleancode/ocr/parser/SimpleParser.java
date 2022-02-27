@@ -18,8 +18,6 @@ public class SimpleParser implements Parser<char[][], Integer> {
                 return i;
             }
         }
-
         throw new IllegalNumberException("Input is not a number");
     }
-
 }
