@@ -6,6 +6,8 @@ import fr.lphn.esgi.cleancode.ocr.parser.SimpleParser;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static junit.framework.Assert.*;
 
 public class OCRTest {
@@ -53,8 +55,8 @@ public class OCRTest {
     }
 
     @Test
-    void GivenALetter_WhenIAssignAnIllegalLetter_ThenIHaveALetterResultAndILL() {
-        assertEquals("123?5672? ILL", ocr.assignateLetters("123?5672?"));
+    void GivenAIllegalLetter_WhenICheckTheChecksum_ThenIHaveAFalseResult() {
+        assertFalse(ocr.checksum("123?56789"));
     }
 
 }
