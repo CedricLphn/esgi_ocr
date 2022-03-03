@@ -1,32 +1,30 @@
 package fr.lphn.esgi.cleancode.ocr.writer;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.io.*;
 
 public class FileWriter implements Writer {
+
     private final File file;
 
-    public FileWriter(String filename) {
-        this.file = new File(filename);
+    public FileWriter(String fileName) {
+        this.file = new File(fileName);
     }
 
     @Override
-    public void get() {
-        try {
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                String data = scanner.nextLine();
-                System.out.println(data);
-            }
-            scanner.close();
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
+    public boolean fileExist() {
+        return this.file.exists();
+    }
+
+    @Override
+    public void write(String message) throws IOException {
+        if(!fileExist()) {
+            if(!file.createNewFile())
+                throw new IOException("Cannot create " + file.getName());
         }
-    }
 
-    @Override
-    public void write() {
+        PrintWriter fileWriter = new PrintWriter(new java.io.FileWriter(file, true));
 
+        fileWriter.write(message + "\n");
+        fileWriter.close();
     }
 }
