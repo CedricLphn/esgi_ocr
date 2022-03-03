@@ -32,7 +32,7 @@ public class ReaderTest {
     }
 
     @Test
-    void ReaderTest() {
+    void GivenAFile_WhenRead_ThenDataNotNull() {
         reader.read();
         List<String> strings = reader.get();
 

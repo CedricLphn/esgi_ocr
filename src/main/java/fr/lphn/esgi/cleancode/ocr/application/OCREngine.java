@@ -74,7 +74,6 @@ public class OCREngine implements Engine {
                     letter.append(parse);
                 } catch (IllegalNumberException e) {
                     letter.append('?');
-                    System.out.println(e.getMessage());
                 }
             }
             logger.log(assignateLetters(letter.toString()));
